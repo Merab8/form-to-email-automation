@@ -1,0 +1,248 @@
+{
+  "name": "Form to Email Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Contact Form",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Name"
+            },
+            {
+              "fieldLabel": "Email"
+            },
+            {
+              "fieldLabel": "Message"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.6,
+      "position": [
+        0,
+        0
+      ],
+      "id": "95e6e349-6a08-4391-a4e7-4959dadda8ca",
+      "name": "On form submission",
+      "webhookId": "4817373f-6180-47ef-8c4e-2a46e1b61047"
+    },
+    {
+      "parameters": {
+        "fromEmail": "memyrb888@gmail.com",
+        "toEmail": "memyrb888@gmail.com",
+        "subject": "=New Form Submission from {{ $json.Name }}",
+        "html": "=Name: {{ $json.Name }}\nEmail: {{ $json.Email }}\nMessage: {{ $json.Message }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "d6ec9f3e-1dab-4dce-ab54-775d98f9d734",
+      "name": "Send an Email",
+      "webhookId": "3e4f7f4e-1104-40b7-b319-52bf60404247",
+      "credentials": {
+        "smtp": {
+          "id": "5WAnP09nFkqNA9k6",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "memyrb888@gmail.com",
+        "toEmail": "memyrb888@gmail.com",
+        "subject": "=Thanks For Reaching Out!",
+        "html": "=Hi {{ $('On form submission').item.json.Name }},\n\nThank you for contacting us! We received your message:\n\"{{ $('On form submission').item.json.Message }}\"\n\nWe'll get back to you soon.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "0a572f4c-b3b9-40cd-a42d-1043a27fc16e",
+      "name": "Send an Email1",
+      "webhookId": "7d27683e-698d-4dbf-98e6-7ad9abb0f3e1",
+      "credentials": {
+        "smtp": {
+          "id": "5WAnP09nFkqNA9k6",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "17JP6LVrLA3tYfG_R99olLXXCqZ9s-qsJ1LAwIni4KUw",
+          "mode": "list",
+          "cachedResultName": "Form Submission",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17JP6LVrLA3tYfG_R99olLXXCqZ9s-qsJ1LAwIni4KUw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17JP6LVrLA3tYfG_R99olLXXCqZ9s-qsJ1LAwIni4KUw/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $json.Name }}",
+            "Email": "={{ $json.Email }}",
+            "Message": "={{ $json.Message }}",
+            "Date": "={{ $json.submittedAt }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        560,
+        0
+      ],
+      "id": "4d993870-03b9-4553-98d6-9607b914f9db",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "OsWoJhXXEbVtEiFJ",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "webhook",
+        "content": "=🔔 New form submission!\nName: {{ $json.Name }}\nEmail: {{ $json.Email }}\nMessage: {{ $json.Message }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        768,
+        0
+      ],
+      "id": "7b28ae90-1d8d-4c7e-9c4c-01251128e574",
+      "name": "Discord",
+      "webhookId": "d32cef33-2ba2-4520-ae48-5578870596e8",
+      "credentials": {
+        "discordWebhookApi": {
+          "id": "Vq98eVCS2hFndwzU",
+          "name": "Discord Webhook account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send an Email": {
+      "main": [
+        [
+          {
+            "node": "Send an Email1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Discord",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Discord": {
+      "main": [
+        [
+          {
+            "node": "Send an Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "67847dd4-15fe-4a48-afff-40ee1ec7c6ec",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "410df3686e2b56e4644673f00fb7c55ef24e4c7a8b7bdbd5111722f1edf63414"
+  },
+  "nodeGroups": [],
+  "id": "69LVeL8JoVDb9Jcc",
+  "tags": []
+}
